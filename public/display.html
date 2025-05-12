@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trivia Display</title>
+  <style>
+    body {
+      background: #111;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100vh;
+    }
+    .question {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+    .answers button {
+      background: #222;
+      border: 2px solid #444;
+      color: #fff;
+      padding: 1rem;
+      margin: 0.5rem;
+      font-size: 1.2rem;
+      cursor: default;
+      min-width: 300px;
+    }
+    .highlight {
+      background: green;
+      border-color: #0f0;
+    }
+    .scoreboard {
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="question">Waiting for question...</div>
+  <div class="answers"></div>
+  <div class="scoreboard"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const questionEl = document.querySelector('.question');
+    const answersEl = document.querySelector('.answers');
+    const scoreboardEl = document.querySelector('.scoreboard');
+
+    socket.on('question', (data) => {
+      questionEl.innerHTML = data.question;
+      answersEl.innerHTML = '';
+      scoreboardEl.innerHTML = '';
+      data.answers.forEach(answer => {
+        const btn = document.createElement('button');
+        btn.textContent = answer;
+        answersEl.appendChild(btn);
+      });
+    });
+
+    socket.on('answerReveal', (data) => {
+      [...answersEl.children].forEach(btn => {
+        if (btn.textContent === data.correct) {
+          btn.classList.add('highlight');
+        }
+      });
+      scoreboardEl.innerHTML = '<h2>Scores</h2>' + data.scores.map(p => `${p.username}: ${p.score}`).join('<br>');
+    });
+  </script>
+</body>
+</html>

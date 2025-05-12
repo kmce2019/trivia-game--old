@@ -1,0 +1,17 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+model TriviaQuestion {
+  id         Int      @id @default(autoincrement())
+  question   String
+  answer     String
+  category   String
+  difficulty String
+}
