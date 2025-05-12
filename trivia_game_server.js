@@ -18,6 +18,6 @@ app.get('/api/question', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Trivia server running on http://localhost:${PORT}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server listening on port ${port}`);
 });
