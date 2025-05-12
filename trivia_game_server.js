@@ -5,10 +5,9 @@ const path = require('path');
 const app = express();
 const PORT = 3080;
 
-// Serve static files (e.g., display.html and player.html)
+// Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// API endpoint for a trivia question
 app.get('/api/question', async (req, res) => {
   try {
     const response = await fetch('https://opentdb.com/api.php?amount=1&type=multiple');
@@ -23,7 +22,6 @@ app.get('/api/question', async (req, res) => {
   }
 });
 
-// Start server on 0.0.0.0 for external access
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server listening on port ${PORT}`);
 });
