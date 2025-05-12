@@ -4,5 +4,16 @@ services:
   trivia:
     build: .
     ports:
-      - "3080:3000"
+      - "3080:3080"
+    environment:
+      - NODE_ENV=development
     restart: unless-stopped
+    depends_on:
+      - db
+    command: sh -c "npx prisma migrate deploy && node trivia_game_server.js"
+
+  db:
+    image: nouchka/sqlite3:latest
+    volumes:
+      - ./data:/data
+    command: tail -f /dev/null
